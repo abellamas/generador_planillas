@@ -1,0 +1,7 @@
+.venv
+output/*
+!output/OUTPUT.md
+templates/*
+!templates/TEMPLATES.md
+databases/*
+!databases/DATABASES.md
