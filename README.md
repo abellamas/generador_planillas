@@ -1,6 +1,25 @@
 # GENERADOR DE PLANILLAS
+Instalación de Entorno virtual:
 
+```console
+python -m virtualenv .vnev
+```
+Activación del entorno virtual en windows:
 
+```console
+.venv/Scripts/activate
+```
+
+Instalación de dependencias:
+
+```console
+pip install -r requeriments.txt
+```
+
+Ejecucion del script:
+```console
+python main.py
+```
 
 # IDEA
 
