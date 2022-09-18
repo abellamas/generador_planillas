@@ -19,32 +19,36 @@ def execute(comision_id):
   print("Realizando escritura de planilla en Excel...")
   
   
+  # planilla de alumnos
+  
   planilla.write(
     cols_dataframe=['comision','dni','apellido','nombre','email','telefono','observaciones'],
     wr_cols_excel = ['B','C','D','F','H','I','J'],
-    start_row=6
+    start_row=11
   )
   
   
   df_info_comision = ExcelDataframe(settings.SEDES_COMISIONES,'COMISIONES').filter_data('comision',planilla.comision).to_dict('records')[0]
   
   header_listado = {
-    'E1': df_info_comision['comision'],
-    'E2': df_info_comision['direccion'],
-    'E3': df_info_comision['turno'],
-    'F1': df_info_comision['sede'],
-    'H3': df_info_comision['orientacion'],
-    'J1':'=COUNTIF(C6:C36,"<>")', # alumnos formula excel
-    'J2': df_info_comision['referente'],
-    'J3': df_info_comision['telefono'],
-    'L1': df_info_comision['dias'],
-    'L2': df_info_comision['horarios'],
-    'L3': df_info_comision['cuatrimestre']
+    'E5': df_info_comision['comision'],
+    'E6': df_info_comision['sede'],
+    'E7': df_info_comision['direccion'],
+    'E8': df_info_comision['turno'],
+    
+    'H5': df_info_comision['orientacion'],
+    'H6': df_info_comision['cuatrimestre'],
+    'H7': df_info_comision['dias'],
+    'H8': df_info_comision['horarios'],
+    
+    'K5':'=COUNTIF(C6:C36,"<>")', # alumnos formula excel
+    'K6': df_info_comision['referente'],
+    'K7': df_info_comision['telefono'],
   }
   
   planilla.headers(structure=header_listado)
 
-  # hoja calificaciones
+  # planilla de calificaciones
 
   planilla.set_sheetname('Calificaciones')
   planilla.load_data()
@@ -53,6 +57,7 @@ def execute(comision_id):
     wr_cols_excel = ['B','C','E','G'],
     start_row=16
   )
+  
   header_calificaciones = {
     'C8': df_info_comision['comision'],
     'C9': df_info_comision['sede'],
@@ -60,10 +65,34 @@ def execute(comision_id):
     'F9': df_info_comision['direccion'],
     'F10': df_info_comision['cuatrimestre']
   }
+  
   planilla.headers(structure=header_calificaciones)
+  
+  # Planilla de Asistencia
+  
+  planilla.set_sheetname('Asistencia')
+  planilla.load_data()
+  planilla.write(
+    cols_dataframe = ['apellido','nombre','dni'],
+    wr_cols_excel= ['B','C','D'],
+    start_row=8
+  )
+  
+  header_asistencia = {
+    'C2': df_info_comision['comision'],
+    'C3': df_info_comision['sede'],
+    'K2': df_info_comision['cuatrimestre'],
+    'K3': df_info_comision['direccion'],
+  }
+  
+  planilla.headers(structure=header_asistencia)
+  
+  planilla.set_sheetname('Listado')
   planilla.save()
+  planilla.convert_to_pdf()
   
   print(f"Planilla de la comisión {planilla.comision} creada con exito!")
+  
   
   
   
