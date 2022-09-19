@@ -2,7 +2,7 @@ from app import settings
 from app.listado import Listado, ExcelDataframe
 
 def execute(comision_id):
-  planilla = Listado(
+      planilla = Listado(
     comision = comision_id,
     template = settings.TEMPLATES + '\\template.xlsx',
     output_dir = settings.OUTPUT_DIR,
