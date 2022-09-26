@@ -2,6 +2,7 @@
 output/*
 !output/OUTPUT.md
 templates/*
+!templates/template.xlsx
 !templates/TEMPLATES.md
 databases/*
 !databases/DATABASES.md
