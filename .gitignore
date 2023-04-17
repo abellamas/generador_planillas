@@ -6,3 +6,6 @@ templates/*
 !templates/TEMPLATES.md
 databases/*
 !databases/DATABASES.md
+
+app/__pycache__/
+

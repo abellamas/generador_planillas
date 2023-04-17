@@ -22,8 +22,9 @@ def execute(comision_id):
     # planilla de alumnos
 
     planilla.write(
-        cols_dataframe=['comision', 'dni', 'apellido', 'nombre', 'email', 'telefono', 'observaciones'],
-        wr_cols_excel=['B', 'C', 'D', 'F', 'H', 'I', 'J'],
+        cols_dataframe=['comision', 'dni', 'apellido', 'nombre', 'email', 'telefono', 'observaciones',
+                        'dni_doc', 'p_nac', 'certificado'],
+        wr_cols_excel=['B', 'C', 'D', 'F', 'H', 'I', 'J', 'M', 'N', 'O'],
         start_row=8
     )
 
@@ -41,7 +42,7 @@ def execute(comision_id):
         'H4': df_info_comision['dias'],
         'H5': df_info_comision['horarios'],
 
-        'K2': '=COUNTIF(C8:C37,"<>")',  # alumnos formula excel
+        'K2': '=COUNTIF(C8:C37,"<>")',  # cantidad de alumnos formula excel
         'K3': df_info_comision['referente'],
         'K4': df_info_comision['telefono'],
     }
@@ -53,17 +54,17 @@ def execute(comision_id):
     planilla.set_sheetname('Calificaciones')
     planilla.load_data()
     planilla.write(
-        cols_dataframe=['apellido', 'nombre', 'dni', 'fnac'],
-        wr_cols_excel=['B', 'C', 'E', 'G'],
-        start_row=16
+        cols_dataframe=['apellido', 'nombre', 'dni'],
+        wr_cols_excel=['B', 'C', 'D'],
+        start_row=15
     )
 
     header_calificaciones = {
         'C8': df_info_comision['comision'],
         'C9': df_info_comision['sede'],
-        'B10': df_info_comision['cuatrimestre'],
+        'B10': df_info_comision['cuatrimestre'][0:2],#'1°'
         'F9': df_info_comision['direccion'],
-        'F10': df_info_comision['cuatrimestre']
+        'F10': df_info_comision['cuatrimestre'][-2:] #'1C'
     }
 
     planilla.headers(structure=header_calificaciones)

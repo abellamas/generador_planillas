@@ -11,6 +11,6 @@ TEMPLATES = os.path.join(BASE_DIR, 'templates')
 
 
 #Files
-DB = os.path.join(DATABASES, '2022 2C FINES.xlsx')
+DB = os.path.join(DATABASES, '2023 1C FINES.xlsx')
 
 
