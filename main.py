@@ -3,6 +3,7 @@ from app.listado import Listado, ExcelDataframe
 
 
 def execute(comision_id):
+    
     planilla = Listado(
         comision=comision_id,
         template=settings.TEMPLATES + '\\template.xlsx',
@@ -15,7 +16,6 @@ def execute(comision_id):
     print(f"Cargando datos comision {comision_id}...")
 
     planilla.load_data()
-    # planilla.print_df()
 
     print("Realizando escritura de planilla en Excel...")
 
@@ -30,7 +30,10 @@ def execute(comision_id):
 
     df_info_comision = ExcelDataframe(settings.DB, 'COMISIONES').filter_data('comision', planilla.comision).to_dict(
         'records')[0]
-
+    
+    planilla.tutor = df_info_comision['tutor']
+    # planilla.comision_name = planilla.comision.replace('/', ' ')
+    
     header_listado = {
         'E2': df_info_comision['comision'],
         'E3': df_info_comision['sede'],

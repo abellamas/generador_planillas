@@ -49,6 +49,8 @@ class Listado:
 
     def __init__(self, comision, template, output_dir, database, registro_historico, sheetname):
         self.comision = comision
+        self.__comision_name = self.comision.replace('/', ' ')
+        self.__tutor = ''
         self.template = template
         self.output_dir = output_dir
         self.database = database
@@ -59,6 +61,23 @@ class Listado:
         self.__sheet = self.__wb[self.sheetname]  # debe ubicar la hoja donde escribir
         self.__df_filtered = ''
 
+    @property
+    def comision_name(self):
+        return self.__comision_name
+    
+    @comision_name.setter
+    def comision_name(self, name):
+        self.__comision_name = name
+    
+    
+    @property
+    def tutor(self):
+        return self.__tutor
+    
+    @tutor.setter
+    def tutor(self, new_tutor):
+        self.__tutor = new_tutor
+        
     def set_sheetname(self, new_sheetname):
         self.sheetname = new_sheetname
         self.__sheet = self.__wb[self.sheetname]
@@ -97,8 +116,21 @@ class Listado:
                 n += 1
 
     def save(self):
-        comision_name = self.comision.replace('/', ' ')
-        self.__wb.save(self.output_dir + '/' + comision_name + ' LISTADO DE ALUMNOS' + '.xlsx')
+        # comision_name = self.comision.replace('/', ' ')
+        done = False
+        tutor_dir = os.path.join(self.output_dir, self.tutor)
+        comision_dir = os.path.join(tutor_dir, self.comision_name)
+        
+        while done == False: 
+            if os.path.exists(tutor_dir):
+                if os.path.exists(comision_dir):
+                    file_dir = os.path.join(comision_dir, self.comision_name + ' LISTADO DE ALUMNOS.xlsx')
+                    self.__wb.save(file_dir)
+                    done = True
+                else:
+                    os.mkdir(comision_dir) 
+            else:
+                os.mkdir(tutor_dir)            
 
     def headers(self, structure):
         cells = list(structure.keys())
@@ -106,19 +138,23 @@ class Listado:
             self.__sheet[cell] = structure[cell]
 
     def convert_to_pdf(self, sheetnames: list):
-        wb_file = os.path.join(settings.OUTPUT_DIR, f'{self.comision.replace("/", " ")} LISTADO DE ALUMNOS.xlsx')
+        tutor_dir = os.path.join(self.output_dir, self.tutor)
+        comision_dir = os.path.join(tutor_dir, self.comision_name)
+        
+        wb_file = os.path.join(comision_dir, f'{self.comision_name} LISTADO DE ALUMNOS.xlsx')
         excel = win32com.client.Dispatch('Excel.Application')
         excel.Visible = False
 
         try:
             wb = excel.Workbooks.Open(wb_file)
             for sheet in sheetnames:
-                # print('Generando')
+                print(f'Generando PDF {sheet}')
                 wb.Worksheets(sheet).Select()
-                pdf = os.path.join(settings.OUTPUT_DIR, f'{self.comision.replace("/", " ")} {sheet}.pdf')
+                pdf = os.path.join(comision_dir, f'{self.comision_name} {sheet}.pdf')
                 wb.ActiveSheet.ExportAsFixedFormat(0, pdf)
 
         except com_error as e:
+            print(e)
             print('Error al convertir la planilla a PDF')
 
         finally:
