@@ -5,3 +5,6 @@ templates/*
 !templates/TEMPLATES.md
 databases/*
 !databases/DATABASES.md
+app/__pycache__/__init__.cpython-39.pyc
+app/__pycache__/listado.cpython-39.pyc
+app/__pycache__/settings.cpython-39.pyc
