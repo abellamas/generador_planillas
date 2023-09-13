@@ -2,48 +2,46 @@ from app import settings
 from app.listado import Listado, ExcelDataframe
 
 def execute(comision_id):
-      planilla = Listado(
+  planilla = Listado(
     comision = comision_id,
     template = settings.TEMPLATES + '\\template.xlsx',
     output_dir = settings.OUTPUT_DIR,
     database = settings.REGISTRO,
-    registro_historico='2022 1C',
+    registro_historico='ALUMNOS',
     sheetname = 'Listado'
   )
-  
-  print(f"Cargando datos comision {comision_id}...")
-  
+  print(f"Cargando datos comision {comision_id}...")  
   planilla.load_data()
   # planilla.print_df()
-  
+    
   print("Realizando escritura de planilla en Excel...")
-  
-  
+
+
   # planilla de alumnos
   
   planilla.write(
-    cols_dataframe=['comision','dni','apellido','nombre','email','telefono','observaciones'],
-    wr_cols_excel = ['B','C','D','F','H','I','J'],
-    start_row=11
+    cols_dataframe=['apellido','nombre','dni','telefono','email','observaciones'],
+    wr_cols_excel = ['B','C','D','E','F','G'],
+    start_row=9
   )
   
   
-  df_info_comision = ExcelDataframe(settings.SEDES_COMISIONES,'COMISIONES').filter_data('comision',planilla.comision).to_dict('records')[0]
+  df_info_comision = ExcelDataframe(settings.REGISTRO,'COMISIONES').filter_data('comision',planilla.comision).to_dict('records')[0]
   
   header_listado = {
-    'E5': df_info_comision['comision'],
-    'E6': df_info_comision['sede'],
-    'E7': df_info_comision['direccion'],
-    'E8': df_info_comision['turno'],
+    'C1': df_info_comision['comision'],
+    'C2': df_info_comision['sede'],
+    'C3': df_info_comision['direccion'],
+    'C4': df_info_comision['turno'],
+    'C5': df_info_comision['referente'],
     
-    'H5': df_info_comision['orientacion'],
-    'H6': df_info_comision['cuatrimestre'],
-    'H7': df_info_comision['dias'],
-    'H8': df_info_comision['horarios'],
+    'G1': df_info_comision['orientacion'],
+    'G2': df_info_comision['cuatrimestre'],
+    'G3': df_info_comision['dias'],
+    'G4': df_info_comision['horarios'],
+    'G5': df_info_comision['telefono'],
     
-    'K5':'=COUNTIF(C6:C36,"<>")', # alumnos formula excel
-    'K6': df_info_comision['referente'],
-    'K7': df_info_comision['telefono'],
+    # 'K5':'=COUNTIF(C6:C36,"<>")', # alumnos formula excel    
   }
   
   planilla.headers(structure=header_listado)
@@ -61,7 +59,7 @@ def execute(comision_id):
   header_calificaciones = {
     'C8': df_info_comision['comision'],
     'C9': df_info_comision['sede'],
-    'B10': df_info_comision['cuatrimestre'],
+    'C10': df_info_comision['cuatrimestre'],
     'F9': df_info_comision['direccion'],
     'F10': df_info_comision['cuatrimestre']
   }
@@ -74,15 +72,15 @@ def execute(comision_id):
   planilla.load_data()
   planilla.write(
     cols_dataframe = ['apellido','nombre','dni'],
-    wr_cols_excel= ['B','C','D'],
+    wr_cols_excel= ['B','C','E'],
     start_row=8
   )
   
   header_asistencia = {
     'C2': df_info_comision['comision'],
     'C3': df_info_comision['sede'],
-    'K2': df_info_comision['cuatrimestre'],
-    'K3': df_info_comision['direccion'],
+    'M2': df_info_comision['cuatrimestre'],
+    'M3': df_info_comision['direccion'],
   }
   
   planilla.headers(structure=header_asistencia)
@@ -107,7 +105,7 @@ def main():
       execute(comision_id=comision_input)
     
     else:
-      comisiones = list(ExcelDataframe(settings.SEDES_COMISIONES,'COMISIONES').filter_data('comision', 'All'))
+      comisiones = list(ExcelDataframe(settings.REGISTRO,'COMISIONES').filter_data('comision', 'All'))
 
       for comision in comisiones:        
         execute(comision_id=comision)

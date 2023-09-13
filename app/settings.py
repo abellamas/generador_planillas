@@ -11,7 +11,7 @@ TEMPLATES = os.path.join(BASE_DIR, 'templates')
 
 
 #Files
-REGISTRO = os.path.join(DATABASES, 'REGISTRO DE ALUMNOS.xlsx')
+REGISTRO = os.path.join(DATABASES, '2023 2C FINES.xlsx')
 SEDES_COMISIONES = os.path.join(DATABASES, 'SEDES Y COMISIONES 2022 1C.xlsx')
 
 
