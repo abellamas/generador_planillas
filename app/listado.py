@@ -96,8 +96,20 @@ class Listado:
   
       
   def save(self):
-    comision_name = self.comision.replace('/',' ')
-    self.__wb.save(self.output_dir + '/' + comision_name + ' LISTADO DE ALUMNOS' + '.xlsx')
+    done = False
+    tutor_dir = os.path.join(self.output_dir, self.tutor)
+    comision_dir = os.path.join(tutor_dir, self.comision_name)
+    
+    while done == False: 
+        if os.path.exists(tutor_dir):
+            if os.path.exists(comision_dir):
+                file_dir = os.path.join(comision_dir, self.comision_name + ' LISTADO DE ALUMNOS.xlsx')
+                self.__wb.save(file_dir)
+                done = True
+            else:
+                os.mkdir(comision_dir) 
+        else:
+            os.mkdir(tutor_dir)   
   
   def headers(self,structure):
     cells = list(structure.keys())
