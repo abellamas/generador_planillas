@@ -10,6 +10,7 @@ def execute(comision_id):
     registro_historico='ALUMNOS',
     sheetname = 'Listado'
   )
+  
   print(f"Cargando datos comision {comision_id}...")  
   planilla.load_data()
   # planilla.print_df()
@@ -27,6 +28,7 @@ def execute(comision_id):
   
   
   df_info_comision = ExcelDataframe(settings.REGISTRO,'COMISIONES').filter_data('comision',planilla.comision).to_dict('records')[0]
+  planilla.tutor = df_info_comision['tutor']
   
   header_listado = {
     'C1': df_info_comision['comision'],
