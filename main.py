@@ -89,7 +89,7 @@ def execute(comision_id):
   
   planilla.set_sheetname('Listado')
   planilla.save()
-  planilla.convert_to_pdf()
+  planilla.convert_to_pdf(sheetnames=['Listado', 'Asistencia', 'Calificaciones'])
   
   print(f"Planilla de la comisión {planilla.comision} creada con exito!")
   
